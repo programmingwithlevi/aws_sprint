@@ -9,3 +9,8 @@ resource "aws_instance" "app_server" {
 module "vpc" {
   source = "./modules/vpc"
 }
+module "database" {
+  source      = "./modules/database"
+  table_name  = "ministack-app-locks"
+  environment = "development"
+}

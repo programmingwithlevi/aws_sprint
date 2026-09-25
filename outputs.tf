@@ -7,3 +7,7 @@ output "vpc_id" {
   description = "The ID of the custom VPC."
   value       = module.vpc.vpc_id
 }
+output "database_table_name" {
+  description = "Name of the DynamoDB application locks table"
+  value       = module.database.table_name
+}
