@@ -1,0 +1,26 @@
+- hosts: workers
+  become: yes
+  tasks:
+    - name: Ensure systemd drop-in directory exists for myworker
+      file:
+        path: /etc/systemd/system/myworker.service.d
+        state: directory
+        owner: root
+        group: root
+        mode: '0755'
+
+    - name: Deploy primary security override configuration
+      template:
+        src: override.conf.j2
+        dest: /etc/systemd/system/myworker.service.d/override.conf
+        owner: root
+        group: root
+        mode: '0644'
+      notify: Reload systemd and restart worker
+
+  handlers:
+    - name: Reload systemd and restart worker
+      systemd:
+        daemon_reload: yes
+        name: myworker
+        state: restarted

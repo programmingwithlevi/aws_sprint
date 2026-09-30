@@ -1,0 +1,65 @@
+---
+- name: Deploy and harden custom background worker
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Ensure systemd override directory exists
+      file:
+        path: /etc/systemd/system/myworker.service.d
+        state: directory
+        mode: '0755'
+
+    - name: Deploy base systemd service file
+      copy:
+        dest: /etc/systemd/system/myworker.service
+        content: |
+          [Unit]
+          Description=My Custom Background Worker
+          After=network.target
+
+          [Service]
+          Type=simple
+          ExecStart=/usr/bin/sleep 3600
+          Restart=always
+
+          [Install]
+          WantedBy=multi-user.target
+
+    - name: Deploy hardened resource and security override
+      copy:
+        dest: /etc/systemd/system/myworker.service.d/override.conf
+        content: |
+          [Service]
+          # Resource Constraints
+          MemoryMax=50M
+          CPUWeight=100
+
+          # Privilege & Credential Restrictions
+          DynamicUser=yes
+          NoNewPrivileges=yes
+          ProtectSystem=strict
+          ProtectHome=true
+          PrivateTmp=yes
+
+          # Kernel & Hardware Protection
+          ProtectClock=yes
+          ProtectKernelLogs=yes
+          ProtectKernelModules=yes
+          ProtectKernelTunables=yes
+          ProtectControlGroups=yes
+          ProtectHostname=yes
+          RestrictSUIDSGID=yes
+          LockPersonality=yes
+          MemoryDenyWriteExecute=yes
+
+          # Network & Namespace Isolation
+          RestrictAddressFamilies=AF_UNIX
+          RestrictNamespaces=yes
+
+    - name: Ensure systemd daemon is reloaded, service enabled and started
+      systemd:
+        daemon_reload: yes
+        name: myworker.service
+        enabled: yes
+        state: started
