@@ -63,3 +63,13 @@
         name: myworker.service
         enabled: yes
         state: started
+    - name: Verify service is active and secure
+      ansible.builtin.command: systemctl is-active myworker.service
+      register: service_status
+      changed_when: false
+
+    - name: Assert service is running successfully
+      ansible.builtin.assert:
+        that: 
+         - service_status.stdout == 'active'
+        fail_msg: "Worker service failed to start properly after hardening."    

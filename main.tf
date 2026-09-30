@@ -1,16 +1,39 @@
+# VPC Module (Satisfies module.vpc.vpc_id)
+module "vpc" {
+  source  = "terraform-aws-modules/vpc/aws"
+  version = "~> 5.0"
+
+  name = "ministack-vpc"
+  cidr = "10.0.0.0/16"
+
+  azs             = ["us-east-1a", "us-east-1b"]
+  public_subnets  = ["10.0.1.0/24", "10.0.2.0/24"]
+  enable_nat_gateway = false
+}
+
+# Compute Instance (Satisfies aws_instance.app_server)
 resource "aws_instance" "app_server" {
-  ami           = "ami-12345678"
-  instance_type = var.instance_type
+  ami           = "ami-0c55b159cbfafe1f0"
+  instance_type = "t3.micro"
+  subnet_id     = module.vpc.public_subnets[0]
 
   tags = {
-    Name = var.instance_name
+    Name = "ministack-app-server"
   }
 }
-module "vpc" {
-  source = "./modules/vpc"
-}
+
+# Database Module (Satisfies module.database.table_name)
 module "database" {
-  source      = "./modules/database"
-  table_name  = "ministack-app-locks"
-  environment = "development"
+  source  = "terraform-aws-modules/dynamodb-table/aws"
+  version = "~> 4.0"
+
+  name     = "ministack-table"
+  hash_key = "id"
+
+  attributes = [
+    {
+      name = "id"
+      type = "S"
+    }
+  ]
 }

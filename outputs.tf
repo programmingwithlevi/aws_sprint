@@ -1,13 +1,11 @@
 output "instance_hostname" {
-  description = "Private DNS name of the EC2 instance."
-  value       = aws_instance.app_server.private_dns
+  value = aws_instance.web_app.private_dns
 }
 
 output "vpc_id" {
-  description = "The ID of the custom VPC."
-  value       = module.vpc.vpc_id
+  value = module.vpc.vpc_id
 }
+
 output "database_table_name" {
-  description = "Name of the DynamoDB application locks table"
-  value       = module.database.table_name
+  value = module.database.dynamodb_table_id
 }
