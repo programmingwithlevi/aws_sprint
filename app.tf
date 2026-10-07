@@ -6,6 +6,9 @@ resource "aws_instance" "web_app" {
 
   tags = {
     Name          = "ministack-web-app"
-    DatabaseTable = module.database.dynamodb_table_id
+    DatabaseTable = "ministack-table"
+    Environment   = "dev"
+    Owner         = "platform-team"
+    ManagedBy     = "terraform"
   }
 }

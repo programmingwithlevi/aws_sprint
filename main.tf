@@ -20,6 +20,9 @@ resource "aws_instance" "app_server" {
 
   tags = {
     Name = "ministack-app-server"
+    Environment = "dev"
+    Owner       = "platform-team"
+    ManagedBy   = "terraform"
   }
 }
 
@@ -37,4 +40,5 @@ module "database" {
       type = "S"
     }
   ]
+  server_side_encryption_enabled = true
 }
