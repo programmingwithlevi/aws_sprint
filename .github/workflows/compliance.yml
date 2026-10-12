@@ -1,0 +1,25 @@
+name: Compliance Auditor
+
+# Tell GitHub when to wake up this robot
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  run-audit:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Download your repository code onto the temporary cloud machine
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # 2. Ensure your audit script is executable
+      - name: Make Script Executable
+        run: chmod +x ./audit-check.sh
+
+      # 3. Run your script! (We'll expand this to include Terraform/MiniStack next)
+      - name: Execute Audit Script
+        run: ./audit-check.sh
