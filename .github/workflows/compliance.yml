@@ -1,25 +1,39 @@
 name: Compliance Auditor
 
-# Tell GitHub when to wake up this robot
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
     branches: [ "main" ]
 
 jobs:
   run-audit:
     runs-on: ubuntu-latest
 
+    # 1. Spin up MiniStack right inside the GitHub runner as a background service
+    services:
+      ministack:
+        image: ministackorg/ministack:latest
+        ports:
+          - 4566:4566
+
     steps:
-      # 1. Download your repository code onto the temporary cloud machine
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # 2. Ensure your audit script is executable
-      - name: Make Script Executable
-        run: chmod +x ./audit-check.sh
+      # 2. Setup Terraform on the runner
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
 
-      # 3. Run your script! (We'll expand this to include Terraform/MiniStack next)
-      - name: Execute Audit Script
-        run: ./audit-check.sh
+      # 3. Tell Terraform and your scripts to talk to localhost:4566 (MiniStack)
+      - name: Run Audit Against Emulator
+        env:
+          AWS_ACCESS_KEY_ID: test
+          AWS_SECRET_ACCESS_KEY: test
+          AWS_DEFAULT_REGION: us-east-1
+        run: |
+          chmod +x ./audit-check.sh
+          # Initialize and apply Terraform against the local MiniStack container
+          terraform init
+          terraform apply -auto-approve
+          
+          # Now run your compliance check script
+          ./audit-check.sh
