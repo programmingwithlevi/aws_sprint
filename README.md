@@ -1,27 +1,30 @@
-# aws_sprint
-A self-directed six-week sprint toward AWS CloudOps Associate-level competency with Ministack.
+# aws_sprint 🎁 100% Free • No Credit Card Required 💳🚫
+A zero-cost, zero-credit-card cloud engineering sprint. Master enterprise infrastructure, modular IaC, and control-plane auditing locally with zero billing risk using open-source software.
 
-## 🗺️ Project Overview & 6-Week Sprint Roadmap
-`ministack` is a local-first infrastructure laboratory designed to build, automate, and harden production-grade cloud environments from scratch. This repository tracks a rigorous 6-week engineering sprint bridging local hypervisor virtualization, infrastructure-as-code, and fleet management.
+## 🗺️ 6-Week Sprint Roadmap ⚡🏃⚡
+`MiniStack` is a free, local-first infrastructure laboratory designed to build, automate, and harden production-grade cloud environments from scratch.
 
-* **Week 1: Modular 3-Tier Infrastructure** — Establishing local endpoints, VPC patterns, and modular Terraform deployments.
-* **Week 2: Linux Fleet Administration & System Health** — Transitioning to automated state reconciliation with **Ansible**, systemd service hardening, and rigorous transport triage targeting **Ubuntu Linux**.
-* **Week 3:** *(Upcoming)* Cloud Architecture & Network Topologies.
-* **Week 4:** *(Upcoming)* Identity, Access Management, and Security Guardrails.
-* **Week 5:** *(Upcoming)* Observability, Telemetry, and Log Pipelines.
-* **Week 6:** *(Upcoming)* Final Production Deployment & Disaster Recovery Simulation.
+- **Week 1  (Terraform Foundations):** Provisioning a modular 3-tier VPC topology using local MiniStack endpoints.
+- **Week 2  (Linux Fleet Admin):** Automating Ubuntu host configuration, systemd services, and health checks with Ansible.
+- **Week 3a (Network Packet Flows):** Wiring cross-tier connectivity and executing data-plane triage (`curl`, `ss`, `dig`).
+- **Week 3b (Emulation Boundaries):** Auditing local control-plane APIs to map MiniStack emulation limits against real AWS.
+- **Week 4  (Chaos Engineering):** Simulating production failures, dropping routes, and logging raw diagnostic trails.
+- **Week 5  (Runbooks, IAM & Compliance):** Drafting standardized incident runbooks and scanning IaC/IAM via Checkov.
+- **Week 6  (Portfolio Polish):** Packaging technical artifacts into enterprise documentation and STAR interview narratives.
 
 ---
 
-## 🚀 Quick-Start Guide (Current Stage: Week 2)
+## 🚀 Quick-Start Guide 
 
 ### Prerequisites & Environment
-* **Target OS:** Ubuntu 24.04 LTS (`ubuntu-dev` node running via OrbStack hypervisor)
-* **Hypervisor CLI:** OrbStack (`orb`)
-* **Infrastructure-as-Code:** Terraform `>= 1.0`
-* **Configuration Management:** Ansible `>= 2.10`
+- **Environment / Hypervisor:** OrbStack (recommended) or Docker Desktop / local container runtimes.
+- **Container Engine:** Docker `>= 20.10`
+- **Target OS:** Ubuntu 24.04 LTS (running locally)
+- **Infrastructure-as-Code:** Terraform `>= 1.0`
+- **Configuration Management:** Ansible `>= 2.10`
+- **Compliance & Security:** Checkov (for static IaC and IAM analysis)
 
-### Week 1: Provision Infrastructure (Terraform)
+### Quick-Start: Provision Infrastructure (Terraform)
 Navigate to the terraform directory, initialize the environment, and apply the infrastructure configuration:
 ```bash
 cd terraform/

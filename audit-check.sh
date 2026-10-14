@@ -73,6 +73,7 @@ echo "$report_json" > audit-report.json
 echo "Report generated: audit-report.json"
 
 # --- Compliance Evaluations ---
+# --- Compliance Evaluations ---
 missing_env=$(echo "$report_json" | jq '[.instances[] | select(.Environment == "Unassigned")] | length')
 open_sgs=$(echo "$report_json" | jq '[.security_groups[] | select(.OpenToWorld == true and .GroupName != "default")] | length')
 db_status=$(echo "$report_json" | jq -r '.database.TableStatus')
@@ -80,6 +81,9 @@ db_encryption=$(echo "$report_json" | jq -r '.database.EncryptionStatus')
 
 if [ "$missing_env" -gt 0 ]; then
     echo "COMPLIANCE ERROR: $missing_env instance(s) missing 'Environment' tag!"
+    exit 1
+elif [ "$open_sgs" -gt 0 ]; then
+    echo "COMPLIANCE ERROR: $open_sgs security group(s) have rules open to the world (0.0.0.0/0)!"
     exit 1
 elif [ "$db_status" != "ACTIVE" ]; then
     echo "COMPLIANCE ERROR: Database 'ministack-table' is not ACTIVE (Status: $db_status)!"
