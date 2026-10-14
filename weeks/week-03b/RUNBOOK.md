@@ -1,11 +1,11 @@
-# MiniStack 🏷️ Infrastructure & Compliance 🔍 Runbook
-### 1. Overview 🧭
+# Runbook: 🏛️🔍👮‍♂️ Infrastructure & Compliance 
+### 1. 🗺️ Overview
 This repository manages local cloud infrastructure using Terraform and a local emulation runtime (MiniStack). To ensure production readiness, the repository includes an automated compliance auditor (audit-check.sh) that validates resource configurations against strict security and governance baselines before code is deployed.
 
-### 2. Environment & Prerequisites
+### 2. 🌱 Environment & Prerequisites
 Runtime Endpoint: http://localhost:4566
 
-## 🔧🔩 Core Tooling:
+## 🔩 Core Tooling:
 
 * **Terraform (~> 4.0 or higher)**
 
@@ -78,9 +78,9 @@ JSON
     "DeletionProtection": false,
     "ItemCount": 0
   }
-}
+
 ```
-### 6. Troubleshooting & Common Gotchas
+### 6. ⚠️ Troubleshooting & Common Gotchas
 * **AWS CLI Pager Traps: Large outputs from aws CLI commands may open a terminal pager (less). Press q to exit the pager and return to the prompt.**
 
 * **jq Syntax on Object Literals: When evaluating conditions inside jq object definitions (e.g., checking array lengths), wrap the expression in parentheses ([ ... ] | length > 0) to prevent syntax parsing errors.**

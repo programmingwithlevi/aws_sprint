@@ -3,12 +3,13 @@ name: Compliance Auditor
 on:
   push:
     branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
   run-audit:
     runs-on: ubuntu-latest
 
-    # 1. Spin up MiniStack right inside the GitHub runner as a background service
     services:
       ministack:
         image: ministackorg/ministack:latest
@@ -19,11 +20,17 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # 2. Setup Terraform on the runner
+      # 1. Lint the script first so syntax/quoting bugs fail fast
+      - name: Run ShellCheck
+        run: |
+          sudo apt-get update && sudo apt-get install -y shellcheck
+          shellcheck audit-check.sh
+
+      # 2. Setup Terraform
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
-      # 3. Tell Terraform and your scripts to talk to localhost:4566 (MiniStack)
+      # 3. Deploy and Audit
       - name: Run Audit Against Emulator
         env:
           AWS_ACCESS_KEY_ID: test
@@ -31,9 +38,6 @@ jobs:
           AWS_DEFAULT_REGION: us-east-1
         run: |
           chmod +x ./audit-check.sh
-          # Initialize and apply Terraform against the local MiniStack container
           terraform init
           terraform apply -auto-approve
-          
-          # Now run your compliance check script
           ./audit-check.sh
