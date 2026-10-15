@@ -3,6 +3,10 @@ name: Compliance Auditor
 on:
   push:
     branches: [ "main" ]
+    paths:
+      - 'terraform/**'
+      - 'scripts/**'
+      - '.github/workflows/**'
   pull_request:
     branches: [ "main" ]
 
